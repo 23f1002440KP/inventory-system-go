@@ -4,6 +4,7 @@ server:
   port: 8080
 
 database:
+  name: "postgres"
   host: "localhost"
   port: 5432
   user: "postgres"
