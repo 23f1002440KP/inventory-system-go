@@ -5,10 +5,7 @@ import (
 	db "23f1002440KP/inventory-system/database"
 	"23f1002440KP/inventory-system/logger"
 	"fmt"
-
-	"gorm.io/gorm"
-) 
-
+)
 
 func main() {
 	fmt.Println("Starting Inventory System")
@@ -18,14 +15,23 @@ func main() {
 	newLogger.Info("Loading the configurations")
 	cfgpath := configs.LoadConfigs()
 
-
 	//loading the database
 	newLogger.Info("Loading the database")
-	db,err := db.Connect(cfgpath)
+	database, err := db.Connect(cfgpath)
 	if err != nil {
-		newLogger.Error("Not able to connect to the database:","error",err)
+		newLogger.Error("Not able to connect to the database:", "error", err)
+		return 
 	}
-	fmt.Println(db)
+	newLogger.Info("Database connection established")
+	newLogger.Info("Migrating the database")
+
+	err_migrate := db.AutoMigration(database)
+
+	if err_migrate != nil {
+		newLogger.Error("Not able to migrate the database:", "error", err_migrate)
+		return
+	}
+	
 	//loading the server
 
 	//loading the routes

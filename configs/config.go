@@ -13,20 +13,20 @@ import (
 
 type Configs struct {
 	Database struct {
-		Name    string `yaml:"name" env-required:"true"`
+		Name     string `yaml:"name" env-required:"true"`
 		Host     string `yaml:"host"`
 		Port     int    `yaml:"port"`
 		User     string `yaml:"user"`
 		Password string `yaml:"password"`
-	}`yaml:"database"`
+	} `yaml:"database"`
 	Server struct {
 		Host string `yaml:"host" env-required:"true"`
 		Port int    `yaml:"port" env-required:"true"`
-	}`yaml:"server"`
+	} `yaml:"server"`
 }
 
 func LoadConfigs() *Configs {
-	var cfgpath string 
+	var cfgpath string
 	cfgpath = os.Getenv("CONFIG_PATH")
 	if cfgpath == "" {
 		flags := flag.String("config", "configs/config.yaml", "The path to the config file.")
@@ -37,7 +37,7 @@ func LoadConfigs() *Configs {
 	var cfg Configs
 	err := cleanenv.ReadConfig(cfgpath, &cfg)
 	if err != nil {
-		logger.Logger().Error("Not able to read Config file:",tint.Err(err))
+		logger.Logger().Error("Not able to read Config file:", tint.Err(err))
 	}
 	return &cfg
 }

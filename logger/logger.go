@@ -7,8 +7,8 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-func Logger() *slog.Logger{
+func Logger() *slog.Logger {
 	w := os.Stderr
-	logger := slog.New(tint.NewHandler(w,nil))
+	logger := slog.New(tint.NewHandler(w, nil))
 	return logger
 }
