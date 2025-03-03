@@ -27,6 +27,6 @@ func Connect(cfgDb *configs.Configs) (*gorm.DB, error) {
 	}
 
 	logger.Logger().Error("Database is not supported", "db_name", cfgDb.Database.Name)
-	return nil, fmt.Errorf("Database is not supported")
+	return nil, fmt.Errorf("database is not supported")
 
 }

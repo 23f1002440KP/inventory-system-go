@@ -31,6 +31,10 @@ func main() {
 		newLogger.Error("Not able to migrate the database:", "error", err_migrate)
 		return
 	}
+
+	//seeding the database
+	db.Seed(database)
+
 	
 	//loading the server
 
