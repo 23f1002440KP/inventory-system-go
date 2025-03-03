@@ -11,7 +11,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func Connect(cfgDb *configs.Configs) (*gorm.DB, error) {
+type SQLDB struct {
+	Db *gorm.DB
+}
+
+func Connect(cfgDb *configs.Configs) (*SQLDB, error) {
 	// Connect to the database
 
 	if cfgDb.Database.Name == "postgres" {
@@ -23,7 +27,7 @@ func Connect(cfgDb *configs.Configs) (*gorm.DB, error) {
 			logger.Logger().Error("Not able to connect to the database:", tint.Err(err))
 			return nil, err
 		}
-		return db, nil
+		return &SQLDB{Db:db} , nil
 	}
 
 	logger.Logger().Error("Database is not supported", "db_name", cfgDb.Database.Name)

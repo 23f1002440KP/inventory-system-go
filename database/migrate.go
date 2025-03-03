@@ -4,11 +4,10 @@ import (
 	"23f1002440KP/inventory-system/logger"
 	"23f1002440KP/inventory-system/models"
 
-	"gorm.io/gorm"
 )
 
-func AutoMigration(db *gorm.DB) error {
-	err := db.AutoMigrate(
+func (db *SQLDB) AutoMigration() error {
+	err := db.Db.AutoMigrate(
 		&models.Product{},
 		&models.Category{},
 		&models.Supplier{},

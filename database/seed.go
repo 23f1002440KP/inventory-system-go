@@ -5,10 +5,9 @@ import (
 	"23f1002440KP/inventory-system/models"
 	"23f1002440KP/inventory-system/utils"
 
-	"gorm.io/gorm"
 )
 
-func Seed(db *gorm.DB) {
+func (db *SQLDB) Seed() {
 	logger.Logger().Info("Seeding the database")
 	// Seed the database
 
@@ -16,7 +15,7 @@ func Seed(db *gorm.DB) {
 		Email: "Admin@inventSys.com",
 	}
 	
-	existingAdminResult := db.Where("email = ?",existingAdmin.Email).Find(&existingAdmin)
+	existingAdminResult := db.Db.Where("email = ?",existingAdmin.Email).Find(&existingAdmin)
 	
 	if existingAdminResult.RowsAffected > 0 {
 		logger.Logger().Warn("Admin user already exists")
@@ -28,7 +27,7 @@ func Seed(db *gorm.DB) {
 				Role:          models.Admin,
 		}
 		logger.Logger().Warn("Creating the admin user")
-		resultAdmin := db.Create(&adminUser)
+		resultAdmin := db.Db.Create(&adminUser)
 		if resultAdmin.Error != nil {
 			logger.Logger().Error("Not able to create the admin user")
 			return
@@ -40,7 +39,7 @@ func Seed(db *gorm.DB) {
 	existingStaff := models.User{
 		Email: "Staff@inventSys.com",
 	}
-	existingStaffResult := db.Where("email = ?", existingStaff.Email).Find(&existingStaff)
+	existingStaffResult := db.Db.Where("email = ?", existingStaff.Email).Find(&existingStaff)
 
 	if existingStaffResult.RowsAffected > 0  {
 		logger.Logger().Warn("Staff user already exists")
@@ -54,7 +53,7 @@ func Seed(db *gorm.DB) {
 		}
 
 		logger.Logger().Warn("Creating the staff user")
-		resultStaff := db.Create(&staffUser)
+		resultStaff := db.Db.Create(&staffUser)
 		if resultStaff.Error != nil {
 			logger.Logger().Error("Not able to create the staff user")
 			return

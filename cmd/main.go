@@ -25,7 +25,7 @@ func main() {
 	newLogger.Info("Database connection established")
 	newLogger.Info("Migrating the database")
 
-	err_migrate := db.AutoMigration(database)
+	err_migrate := database.AutoMigration()
 
 	if err_migrate != nil {
 		newLogger.Error("Not able to migrate the database:", "error", err_migrate)
@@ -33,7 +33,7 @@ func main() {
 	}
 
 	//seeding the database
-	db.Seed(database)
+	database.Seed()
 
 	
 	//loading the server
