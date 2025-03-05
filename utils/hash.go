@@ -17,14 +17,13 @@ func HashPasword(password string) string {
 	return string(hashedPassword)
 }
 
-func CompareHashAndPassword(hashedPassword string, password string) bool {
+func CompareHashAndPassword(hashedPassword []byte, password []byte) bool {
 	// compare the password
 	var result bool = true
 	// compare the password 
 	// convert byte to string : string(hashedPassword)
 	// convert string to byte : []byte(hashedPassword)
-
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	err := bcrypt.CompareHashAndPassword(hashedPassword, password)
 	if err != nil {
 		result = false		
 	}
