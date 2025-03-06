@@ -101,14 +101,26 @@ func HandleLoginPOST(database *db.SQLDB) http.Handler {
 					return
 				}
 		
-				userId,err := database.Login(user.Email,user.Password)
-		
+				userPayload,err := database.Login(user.Email,user.Password)
+
+
+				
+
 				if err !=nil {
 					logger.Logger().Error("Error Logging In User","error",err)
 					utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(err))
 				}else{
+					logger.Logger().Info("Generating JWT Token")
+					jwtToken ,err := utils.GenerateJWT(userPayload)
+					if err != nil {
+						logger.Logger().Error("Error Generating JWT Token","error",err)
+						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(err))
+						return
+					}
+					w.Header().Set("Authorization",jwtToken)
+					logger.Logger().Info("JWT token generated successfully","token",jwtToken)
+					utils.WriteJson(w, http.StatusOK, map[string]string{"Success": "User Logged In","token":jwtToken})
 					logger.Logger().Info("User Logged In Successfully")
-					utils.WriteJson(w, http.StatusOK, map[string]string{"Success": "User Logged In","id":fmt.Sprintf("%d",userId)})
 				}
 		
 			}))

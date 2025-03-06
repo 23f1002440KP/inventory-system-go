@@ -10,6 +10,7 @@ import (
 
 
 
+
 func (database *SQLDB) Register(name string, email string, password string, role string) (int64, error) {
 
 	if role != "admin" && role != "staff" {
@@ -46,26 +47,31 @@ func (database *SQLDB) Register(name string, email string, password string, role
 }
 
 
-func (database *SQLDB) Login(email string, password string) (int64, error) {
+func (database *SQLDB) Login(email string, password string) (map[string]string, error) {
 	var user models.User
+	userPayload := make(map[string]string)
 
 	if database == nil {
-		return 0, fmt.Errorf("database is nil auth_interface")
+		return nil , fmt.Errorf("database is nil auth_interface")
 	}
 
 	database.Db.Where("email = ?", email).First(&user)
 
 
 	if user.ID == 0 {
-		return 0, fmt.Errorf("user not found")
+		return nil, fmt.Errorf("user not found")
 	}
 	hashedPassword := user.Password_hash
 	binHash := []byte(hashedPassword)
 
 	if !utils.CompareHashAndPassword(binHash, []byte(password)) {
-		return 0, fmt.Errorf("password is not valid")
+		return nil , fmt.Errorf("password is not valid")
 	}
 
-	return int64(user.ID), nil
+	userPayload["id"] = fmt.Sprintf("%d", user.ID)
+	userPayload["email"] = user.Email
+	userPayload["role"] = string(user.Role)
+	
+	return userPayload , nil
 	
 }

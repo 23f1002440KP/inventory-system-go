@@ -43,8 +43,6 @@ func main() {
 	//seeding the database
 	database.Seed()
 
-	
-	//loading the server
 
 	//loading the routes
 
@@ -67,7 +65,6 @@ func main() {
 	}
 
 	logger.Logger().Info("Starting the server at", "address", fmt.Sprintf("http://%s", addr))
-	//listening to the server
 
 	done := make(chan os.Signal, 1)
 
@@ -79,6 +76,8 @@ func main() {
 			logger.Logger().Error("Error starting the server", "error", err)
 		}
 	}()
+
+
 	//shutting down the server
 	<- done 
 	logger.Logger().Info("Shutting down the server")
