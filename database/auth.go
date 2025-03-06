@@ -1,10 +1,10 @@
 package db
 
 import (
+	// "23f1002440KP/inventory-system/logger"
 	"23f1002440KP/inventory-system/models"
 	"23f1002440KP/inventory-system/utils"
 	"fmt"
-
 	// "golang.org/x/crypto/bcrypt"
 )
 
@@ -74,4 +74,26 @@ func (database *SQLDB) Login(email string, password string) (map[string]string, 
 	
 	return userPayload , nil
 	
+}
+
+
+func (database *SQLDB) GetUser(id string) (map[string]string, error) {
+	var user models.User
+	userPayload := make(map[string]string)
+
+	if database == nil {
+		return nil , fmt.Errorf("database is nil auth_interface")
+	}
+	database.Db.Where("id = ?", id).First(&user)
+
+	if user.ID == 0 {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	userPayload["name"] = user.Name
+	userPayload["email"] = user.Email
+	userPayload["role"] = string(user.Role)
+
+	return userPayload , nil
+
 }

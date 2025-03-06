@@ -8,6 +8,7 @@ import (
 
 func AuthRoutes(router *http.ServeMux, database *db.SQLDB) {
 
-	router.Handle("POST /register",controllers.HandleRegisterPOST(database))
-	router.Handle("POST /login",controllers.HandleLoginPOST(database))
+	router.Handle("POST /auth/register",controllers.HandleRegisterPOST(database))
+	router.Handle("POST /auth/login",controllers.HandleLoginPOST(database))
+	router.Handle("GET /auth/me",controllers.HandleGetUserGET(database))
 }
