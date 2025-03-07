@@ -26,7 +26,6 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
-
 func HandleRegisterPOST(database *db.SQLDB) http.Handler {
 	return middleware.LoggingMiddleware(
 		http.HandlerFunc(
@@ -136,7 +135,7 @@ func HandleGetUserGET(database *db.SQLDB) http.Handler {
 				func(w http.ResponseWriter, r *http.Request) {
 
 					id, err := r.Context().Value(utils.UserIDKey).(string)
-					
+
 					if !err {
 						logger.Logger().Error("Error Getting User", "error", err)
 						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("error getting user from context")))
