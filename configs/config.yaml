@@ -1,4 +1,4 @@
-
+# Example of a configuration file
 server:
   host: "localhost"
   port: 8080
