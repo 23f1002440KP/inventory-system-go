@@ -17,7 +17,7 @@ type NewCategory struct {
 	Description string `json:"description"`
 }
 
-func isNumeric(s string) bool {
+func IsNumeric(s string) bool {
 	re := regexp.MustCompile(`^\d+$`)
 	return re.MatchString(s)
 }
@@ -86,7 +86,7 @@ func HandleGetCategoryByIDGET(database *db.SQLDB) http.Handler {
 				func(w http.ResponseWriter, r *http.Request) {
 					// Handle the get category by ID request
 					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //1
-					if !isNumeric(categoryId) {
+					if !IsNumeric(categoryId) {
 						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
 						return
 					}
@@ -110,7 +110,7 @@ func HandleUpdateCategoryByIDPUT(database *db.SQLDB) http.Handler {
 
 					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //2
 
-					if !isNumeric(categoryId) {
+					if !IsNumeric(categoryId) {
 						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
 						return
 					}
@@ -156,7 +156,7 @@ func HandleDeleteCategoryByIDDELETE(database *db.SQLDB) http.Handler {
 					//handle the delete category by ID request
 					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //3
 
-					if !isNumeric(categoryId) {
+					if !IsNumeric(categoryId) {
 						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
 						return
 					}  
