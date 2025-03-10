@@ -292,11 +292,11 @@ Staff ——>
 
 ### 🏢 **Suppliers (`/suppliers`)**
 
-- [ ] `POST /suppliers` - Add a supplier
-- [ ] `GET /suppliers` - Get all suppliers
-- [ ] `GET /suppliers/:id` - Get supplier details
-- [ ] `PUT /suppliers/:id` - Update supplier
-- [ ] `DELETE /suppliers/:id` - Delete supplier
+- [x] `POST /suppliers` - Add a supplier
+- [x] `GET /suppliers` - Get all suppliers
+- [x] `GET /suppliers/:id` - Get supplier details
+- [x] `PUT /suppliers/:id` - Update supplier
+- [x] `DELETE /suppliers/:id` - Delete supplier
 
 ### 📦 **Products (`/products`)**
 
