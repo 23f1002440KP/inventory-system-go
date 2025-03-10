@@ -8,6 +8,8 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"regexp"
+	"strings"
 )
 
 type NewCategory struct {
@@ -15,6 +17,10 @@ type NewCategory struct {
 	Description string `json:"description"`
 }
 
+func isNumeric(s string) bool {
+	re := regexp.MustCompile(`^\d+$`)
+	return re.MatchString(s)
+}
 // HandleCreateCategoryPOST handles the create category request
 func HandleCreateCategoryPOST(databse *db.SQLDB) http.Handler {
 	// handle the create category request
@@ -79,7 +85,12 @@ func HandleGetCategoryByIDGET(database *db.SQLDB) http.Handler {
 			http.HandlerFunc(
 				func(w http.ResponseWriter, r *http.Request) {
 					// Handle the get category by ID request
-					categoryId := r.URL.Query().Get("id")
+					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //1
+					if !isNumeric(categoryId) {
+						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
+						return
+					}
+
 					category, err := database.GetCategoryByID(categoryId)
 					if err != nil {
 						utils.WriteJson(w, http.StatusInternalServerError, utils.GeneralError(err))
@@ -97,7 +108,13 @@ func HandleUpdateCategoryByIDPUT(database *db.SQLDB) http.Handler {
 				func(w http.ResponseWriter, r *http.Request) {
 					//handle the update category by ID request
 
-					categoryId := r.URL.Query().Get("id")
+					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //2
+
+					if !isNumeric(categoryId) {
+						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
+						return
+					}
+					 
 					var updatedCategory NewCategory
 					err := json.NewDecoder(r.Body).Decode(&updatedCategory)
 
@@ -137,7 +154,14 @@ func HandleDeleteCategoryByIDDELETE(database *db.SQLDB) http.Handler {
 			http.HandlerFunc(
 				func(w http.ResponseWriter, r *http.Request) {
 					//handle the delete category by ID request
-					categoryId := r.URL.Query().Get("id")
+					categoryId := strings.TrimPrefix(r.URL.Path,"/categories/")  //3
+
+					if !isNumeric(categoryId) {
+						utils.WriteJson(w, http.StatusBadRequest, utils.GeneralError(errors.New("category id must be a number")))
+						return
+					}  
+
+					
 					err := database.DeleteCategoryByID(categoryId)
 					if err != nil {
 						utils.WriteJson(w, http.StatusInternalServerError, utils.GeneralError(err))

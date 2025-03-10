@@ -1,6 +1,7 @@
 package db
 
 import (
+	// "23f1002440KP/inventory-system/logger"
 	"23f1002440KP/inventory-system/models"
 )
 
@@ -41,7 +42,7 @@ func (database *SQLDB) GetAllCategories() ([]models.Category, error) {
 func (database *SQLDB) GetCategoryByID(id string) (*models.Category, error) {
 
 	var category models.Category
-	err := database.Db.Find(&category, id)
+	err := database.Db.Where("id=?",id).First(&category)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -53,7 +54,7 @@ func (database *SQLDB) GetCategoryByID(id string) (*models.Category, error) {
 func (database *SQLDB) UpdateCategoryByID(id string, updatedCategory *CreateCategory) error {
 
 	var category models.Category
-	err := database.Db.Find(&category, id)
+	err := database.Db.Where("id=?",id).First(&category)
 	if err.Error != nil {
 		return err.Error
 	}
@@ -74,16 +75,18 @@ func (database *SQLDB) UpdateCategoryByID(id string, updatedCategory *CreateCate
 func (database *SQLDB) DeleteCategoryByID(id string) error {
 
 	var category models.Category
-	err := database.Db.Find(&category, id)
+	category.IsDeleted = false
+	err := database.Db.Where("id=?",id).First(&category)
 	if err.Error != nil {
 		return err.Error
 	}
+	// add a function which deletes everything whch belong to teh category
+	category.IsDeleted = true
 
-	deleted := database.Db.Delete(&category)
+	deleted := database.Db.Save(&category)
 	if deleted.Error != nil {
 		return deleted.Error
 	}
-
 	return nil
 
 }
