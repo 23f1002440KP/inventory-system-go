@@ -18,5 +18,5 @@ func AllRoutes(routesType RoutesType) {
 	
 	AuthRoutes(routesType.Router, routesType.Database) // Authentication Routes 
 	CategoryRoutes(routesType.Router, routesType.Database) // Category Routes
-
+	SupplierRoutes(routesType.Router, routesType.Database) // Supplier Routes
 }
